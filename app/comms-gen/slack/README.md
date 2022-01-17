@@ -26,7 +26,30 @@ im:read
 mpim:read
 ```
 
-Then take the bot token from same screen and place in the `config.json` file for this app (see next section).
+If you'd like this application to be defined in code and live in source control, you can also create an app [here](https://api.slack.com/apps?new_app=1) using an app manifest (hit 'Create New App' and hit 'From an app manifest'). An example app manifest would be:
+
+```yml
+display_information:
+  name: workspace-admin
+features:
+  bot_user:
+    display_name: workspace-admin
+    always_online: false
+oauth_config:
+  scopes:
+    bot:
+      - channels:manage
+      - channels:read
+      - groups:read
+      - im:read
+      - mpim:read
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
+```
+
+Once the app is created and installed onto your workspace, take the bot token from the 'Oauth & Permissions' screen and place in the `config.json` file for this app (see next section).
 
 ## Script Configuration
 In order to use this script, you will need to add a `config.json` file in the same directory as the script. This should contain some JSON that will store your bot token locally. It has been excluded in the `.gitignore` file. This is temporary, until such time OAuth can be implemented.
