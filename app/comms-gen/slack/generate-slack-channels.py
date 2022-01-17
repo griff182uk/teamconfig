@@ -5,11 +5,23 @@ import glob
 import requests
 
 def set_context():
-    currentPath = os.path.dirname(os.path.abspath(__file__))
-    endIndex = currentPath.find('/app')
-    basePath = currentPath[0:endIndex]
-    os.chdir(basePath)
-    # print(os.getcwd())
+    scriptLocation = os.path.dirname(os.path.abspath(__file__))
+    print(f'Script location: {scriptLocation}')
+
+    referenceFolder = f'{os.path.sep}app'
+    print(f'Attempting to find specific folder in script path for reference: {referenceFolder}')
+    endIndex = scriptLocation.find(f'{referenceFolder}')
+
+    if (endIndex > -1):
+        print('Reference folder found in script path.')
+        basePath = scriptLocation[0:endIndex]
+
+        print(f'Changing directory to desired root folder.')
+        os.chdir(basePath)
+        print(f'Context changed to: {basePath}')
+    else:
+        print('Reference folder not found in script path. Exiting script.')
+        exit()
 
 def get_api_token(medium):
     # Try get config from environment variable
@@ -24,14 +36,14 @@ def get_api_token(medium):
     return config['API_TOKEN']
 
 def load_config_file(medium):
-    configFile = f'./app/comms-gen/{medium}/config.json'
+    configFile = os.path.join(f'.{os.path.sep}', 'app', 'comms-gen', medium, 'config.json')
     config = {}
 
     if (isfile(configFile)):
         with open(configFile,) as file:
             config = json.load(file)
     else:
-        print('slack.config.json not found.')
+        print('config.json not found.')
 
     return config
 
@@ -39,13 +51,13 @@ def load_teams_configuration():
     print('Loading teams config..')
 
     teams = []
-    teamsDir = './teams/*.json'
+    teamsDir = os.path.join(f'.{os.path.sep}', 'teams', '*.json')
 
     for f in glob.iglob(teamsDir, recursive=True):
         with open(f,) as file:
             teams.append(json.load(file))
 
-    print('Done.')
+    print('Teams config loaded.')
 
     return teams
 
@@ -83,7 +95,7 @@ def extract_comms_data(rawTeamsData, medium):
 
         teams.append(team)
 
-    print('Done.')
+    print('Teams comms data extracted.')
 
     return teams
 
@@ -108,7 +120,7 @@ def generate_slack_channels(apiToken, teamsData):
 
         print(f"Done generating slack channels for {team['name']}.")
 
-    print('Done.')
+    print('Slack channels generated.')
 
 def main():
     set_context()
