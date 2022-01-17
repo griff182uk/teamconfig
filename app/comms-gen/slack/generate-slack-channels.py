@@ -107,22 +107,27 @@ def generate_slack_channels(apiToken, teamsData):
 
     for team in teamsData:
         print(f'Generating slack channels for {team["name"]}..')
+
         for channel in team['channels']:
-            url = baseUrl.format(channel['name'])
+            channelName = channel['name']
+            url = baseUrl.format(channelName)
             response = requests.post(url, headers=headers)
             # response = requests.post('https://slack.com/api/conversations.create?name=python-test', headers=headers)
             if (not response.ok):
-                print(f'Something went wrong creating {channel["name"]}. Reason: {response.reason}')
+                print(f'Something went wrong creating {channelName}. Reason: {response.reason}. Exiting script.')
+                exit()
 
             responseBody = response.json()
 
             if (not responseBody['ok'] and responseBody['error'].lower() == 'name_taken'):
-                print(f'{channel["name"]} already exists')
-            
-            if (not responseBody['ok'] and responseBody['error'].lower() == 'missing_scope'):
+                print(f'{channelName} already exists')
+            elif (not responseBody['ok'] and responseBody['error'].lower() == 'missing_scope'):
                 print(f'Token used does not have the following scopes configured: channels:manage, groups:write, im:write, mpim:write')
                 print('See docs here for further details: https://api.slack.com/methods/conversations.create')
-            
+            elif (not responseBody['ok']):
+                print(f'Error creating channel "{channelName}" Reason: {responseBody["error"].lower()}')
+            else:
+                print(f'{channelName} created.')
 
         print(f"Done generating slack channels for {team['name']}.")
 
