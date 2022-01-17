@@ -115,8 +115,14 @@ def generate_slack_channels(apiToken, teamsData):
                 print(f'Something went wrong creating {channel["name"]}. Reason: {response.reason}')
 
             responseBody = response.json()
+
             if (not responseBody['ok'] and responseBody['error'].lower() == 'name_taken'):
                 print(f'{channel["name"]} already exists')
+            
+            if (not responseBody['ok'] and responseBody['error'].lower() == 'missing_scope'):
+                print(f'Token used does not have the following scopes configured: channels:manage, groups:write, im:write, mpim:write')
+                print('See docs here for further details: https://api.slack.com/methods/conversations.create')
+            
 
         print(f"Done generating slack channels for {team['name']}.")
 
