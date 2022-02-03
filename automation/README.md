@@ -55,7 +55,7 @@ settings:
 Once the app is created and installed onto your workspace, take the bot token from the 'Oauth & Permissions' screen and place in the `slack.config.json` file for this app (see next section).
 
 ### Script Configuration
-In order to use this script, you will need to add a `slack.config.json` file in the same directory as the script. This should contain some JSON that will store your bot token locally. It has been excluded in the `.gitignore` file. This is temporary, until such time OAuth can be implemented.
+In order to use this script, you will need to add a `slack.config.json` file in the `/automation/integrations/` directory. This should contain some JSON that will store your bot token locally. It has been excluded in the `.gitignore` file. This is temporary, until such time OAuth can be implemented. You can make a copy of the `slack.config.json.example` file to get a template and remove the `.example` extension.
 
 ```json
 {
