@@ -34,6 +34,6 @@ def run():
     set_context()
     services = start_up()
     app = services["app"]
-    app.generate_slack_channels()
+    app.run()
 
 run()

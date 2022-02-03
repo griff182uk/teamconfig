@@ -1,10 +1,17 @@
 import os
 import requests
+import sys
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(SCRIPT_DIR)
+import base
 
-class SlackManagerApp:
+class SlackManagerApp(base.Runnable):
     def __init__(self, config, dataMapper):
         self.config = config
         self.dataMapper = dataMapper
+
+    def run(self):
+        self.generate_slack_channels()
 
     def generate_slack_channels(self):
         print('Generating slack channels..')
