@@ -31,7 +31,7 @@ class SlackManagerApp(base.Runnable):
                 response = requests.post(url, headers=headers)
                 # response = requests.post('https://slack.com/api/conversations.create?name=python-test', headers=headers)
                 if (not response.ok):
-                    print(f'Something went wrongstringUtils creating {channelName}. Reason: {response.reason}. Exiting script.')
+                    print(f'Something went wrong creating {channelName}. Reason: {response.reason}. Exiting script.')
                     exit()
 
                 responseBody = response.json()
