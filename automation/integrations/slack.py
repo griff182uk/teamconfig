@@ -41,6 +41,7 @@ class SlackManagerApp(base.Runnable):
                 elif (not responseBody['ok'] and responseBody['error'].lower() == 'missing_scope'):
                     print(f'Token used does not have the following scopes configured: channels:manage, groups:write, im:write, mpim:write')
                     print('See docs here for further details: https://api.slack.com/methods/conversations.create')
+                    exit()
                 elif (not responseBody['ok']):
                     print(f'Error creating channel "{channelName}" Reason: {responseBody["error"].lower()}')
                 else:
