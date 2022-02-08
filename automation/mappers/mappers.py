@@ -39,3 +39,20 @@ class TeamConfigCommunicationDataMapper:
         print('Teams comms data extracted.')
 
         return teams
+
+    def extract_project_data(self, rawTeamsDataPath):
+        print('Extracting project data..')
+
+        rawTeamsData = self.fileLoader.load_files(rawTeamsDataPath)
+
+        projects = []
+
+        for t in rawTeamsData:
+            project = models.Project()
+            project.name = t['overview']['name']
+            project.description = t['overview']['mission']
+            projects.append(project)
+
+        print('Project data extracted.')
+
+        return projects

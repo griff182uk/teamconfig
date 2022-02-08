@@ -11,13 +11,17 @@ class SlackManagerApp(base.Runnable):
         self.dataMapper = dataMapper
 
     def run(self):
-        self.generate_slack_channels()
+        features = self.config['features']
+        moduleConfig = self.config['config']
+        for feature in features:
+            if (feature['name'] == 'channels'):
+                self.generate_slack_channels(moduleConfig)
 
-    def generate_slack_channels(self):
+    def generate_slack_channels(self, moduleConfig):
         print('Generating slack channels..')
 
         baseUrl = 'https://slack.com/api/conversations.create?name={}'
-        apiToken = self.config.get_config_value('API_TOKEN')
+        apiToken = moduleConfig['API_TOKEN']
         headers = {'Authorization': f'Bearer {apiToken}'}
         teamsDataPath = os.path.join('teams', '*.json')
         teamsData = self.dataMapper.extract_comms_data_for_medium(teamsDataPath, 'slack')

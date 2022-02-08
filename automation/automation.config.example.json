@@ -1,0 +1,28 @@
+{
+    "modules": {
+        "slack": {
+            "config": {
+                "API_TOKEN": ""
+            },
+            "features": [
+                {
+                    "name": "channels"
+                }
+            ]
+        },
+        "azdevops": {
+            "config": {
+                "PAT_TOKEN": "",
+                "Organisation": ""
+            },
+            "features": [
+                {
+                    "name": "projects",
+                    "settings": {
+                        "type": "6B724908-EF14-45CF-84F8-768B5384DA45"
+                    }
+                }
+            ]
+        }
+    }
+}

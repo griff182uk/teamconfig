@@ -1,6 +1,6 @@
 import os
 from mappers import mappers
-from integrations import slack
+from modules import slack, azdevops
 import sys
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -15,25 +15,31 @@ def set_context():
     print(f'Context changed to: {repoRootDirectory}')
 
 def start_up():
-    configFile = os.path.join('automation', 'integrations', 'slack.config.json')
     stringUtils = utils.StringUtils()
     fileLoader = utils.FileLoader()
-    config = utils.ConfigurationLoader(fileLoader, configFile)
     teamConfigDataMapper = mappers.TeamConfigCommunicationDataMapper(fileLoader, stringUtils)
-    slackManagerApp = slack.SlackManagerApp(config, teamConfigDataMapper)
 
+    appSettings = fileLoader.load_file(os.path.join('automation', 'automation.config.json'))
+    modulesSettings = appSettings['modules']
+    
+    slackManagerApp = slack.SlackManagerApp(modulesSettings['slack'], teamConfigDataMapper)
+    azDevopsManagerApp = azdevops.AzureDevOpsManager(modulesSettings['azdevops'], teamConfigDataMapper)
+    
     return {
         "stringUtils": stringUtils,
         "fileLoader": fileLoader,
         "teamConfigDataMapper": teamConfigDataMapper,
-        "config": config,
-        "app": slackManagerApp
+        "modules": [
+            slackManagerApp, 
+            azDevopsManagerApp
+        ]
     }
 
 def run():
     set_context()
     services = start_up()
-    app = services["app"]
-    app.run()
+    modules = services["modules"]
+    for module in modules:
+        module.run()
 
 run()
